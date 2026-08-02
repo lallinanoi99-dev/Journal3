@@ -43,7 +43,28 @@ const MOODS = [
   { score: 5, label: 'Great', color: '#FFFACD', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line><path d="M9 14v1a3 3 0 0 0 6 0v-1"></path></svg>' },
 ];
 
-/* ─── Articles (For You) ─────────────────────────────────── */
+/* ─── SVG Icons (UI) ──────────────────────────────────────── */
+function ico(name, size = 14) {
+  return ICONS[name].replace('<svg', `<svg width="${size}" height="${size}" style="display:inline-block;vertical-align:-2px;margin-right:5px;"`);
+}
+const ICONS = {
+  chain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  testnet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5.5L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8.5V3"/><path d="M7 15h10"/></svg>',
+  mainnet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>',
+  medal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><circle cx="12" cy="14" r="2.5" fill="currentColor"/><path d="M8.5 9.5 7 3h10l-1.5 6.5"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.01"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>',
+  list: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>',
+  calendar: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  view: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>',
+  frown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+  smile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+};
 const ARTICLES = [
   {
     id: 1,
@@ -212,7 +233,7 @@ function finishSetup() {
 
 function initContract() {
   if (CONTRACT_ADDRESS === 'YOUR_CONTRACT_ADDRESS_HERE') {
-    showToast('⚠️ Contract address not set. Open app.js and set CONTRACT_ADDRESS.', 'info');
+    showToast('Contract address not set. Open app.js and set CONTRACT_ADDRESS.', 'info');
     return;
   }
   try {
@@ -250,7 +271,7 @@ function showApp() {
   const badge   = document.getElementById('network-badge');
   const isTest  = ACTIVE_NET.chainId === '0x3C8';
   badge.className = `network-badge ${isTest ? 'testnet' : 'mainnet'}`;
-  badge.textContent = isTest ? '🧪 Testnet' : '🟢 Mainnet';
+  badge.innerHTML = isTest ? ico('testnet', 12) + ' Testnet' : ico('mainnet', 12) + ' Mainnet';
 }
 
 function navigateTo(panel) {
@@ -304,19 +325,19 @@ async function loadEntries() {
 
 async function txWriteEntry(text, mood) {
   // Pass empty string since we removed photo support
-  return runTx(() => _contract.writeEntry(text, mood, ""), '✅ Entry saved on chain!', 'write');
+  return runTx(() => _contract.writeEntry(text, mood, ""), 'Entry saved on chain!', 'write');
 }
 
 async function txEditEntry(id, text, mood) {
-  return runTx(() => _contract.editEntry(id, text, mood, ""), '✅ Entry updated!', 'edit');
+  return runTx(() => _contract.editEntry(id, text, mood, ""), 'Entry updated!', 'edit');
 }
 
 async function txDeleteEntry(id) {
-  return runTx(() => _contract.deleteEntry(id), '🗑️ Entry hidden (soft-deleted).', 'delete');
+  return runTx(() => _contract.deleteEntry(id), 'Entry hidden (soft-deleted).', 'delete');
 }
 
 async function txMintEntry(entryId, tokenURI) {
-  return runTx(() => _contract.mintEntryAsNFT(entryId, tokenURI), '🏅 NFT minted!', 'mint');
+  return runTx(() => _contract.mintEntryAsNFT(entryId, tokenURI), 'NFT minted!', 'mint');
 }
 
 async function runTx(txFn, successMsg, action) {
@@ -587,7 +608,7 @@ function writeFormHtml() {
       <div class="form-group">
         <label class="form-label">How are you feeling? *</label>
         <div class="mood-selector">
-          <span class="mood-end-label">😣 Unpleasant</span>
+          <span class="mood-end-label">${ico('frown', 18)} Unpleasant</span>
           <div class="mood-steps" id="mood-steps-panel">
             ${MOODS.map(m => `
               <div class="mood-step" data-score="${m.score}">
@@ -602,7 +623,7 @@ function writeFormHtml() {
                 <span class="mood-btn-label">${m.label}</span>
               </div>`).join('')}
           </div>
-          <span class="mood-end-label" style="text-align:right">Pleasant 😄</span>
+          <span class="mood-end-label" style="text-align:right">Pleasant ${ico('smile', 18)}</span>
         </div>
       </div>
 
@@ -615,14 +636,14 @@ function writeFormHtml() {
       </div>
 
       <p class="chain-note">
-        <span class="chain-note-icon">⛓️</span>
+        <span class="chain-note-icon">${ico('chain', 14)}</span>
         Entries live permanently on BOT Chain.
       </p>
 
       <div class="form-actions">
         <button class="btn-save" id="save-btn-panel" type="button"
                 onclick="handleSave()">
-          Save Entry ✨
+          Save Entry ${ico('sparkle', 15)}
         </button>
       </div>
     </div>
@@ -655,7 +676,7 @@ async function handleSave() {
 
   const receipt = await txWriteEntry(text, _selectedMood);
 
-  if (btn) { btn.disabled = false; btn.textContent = 'Save Entry ✨'; }
+  if (btn) { btn.disabled = false; btn.innerHTML = 'Save Entry ' + ico('sparkle', 15); }
 
   if (receipt) {
     _selectedMood = null;
@@ -673,16 +694,16 @@ function renderEntries() {
   const toggleHtml = `
     <div class="view-toggle" role="group" aria-label="View mode">
       <button class="view-toggle-btn ${_entriesView === 'list' ? 'active' : ''}"
-              onclick="setEntriesView('list')">☰ List</button>
+              onclick="setEntriesView('list')">${ico('list', 14)} List</button>
       <button class="view-toggle-btn ${_entriesView === 'calendar' ? 'active' : ''}"
-              onclick="setEntriesView('calendar')">📅 Calendar</button>
+              onclick="setEntriesView('calendar')">${ico('calendar', 14)} Calendar</button>
     </div>
   `;
 
   if (_entries.length === 0) {
     container.innerHTML = toggleHtml + `
       <div class="empty-state">
-        <div class="empty-icon">📝</div>
+        <div class="empty-icon">${ico('pen', 44)}</div>
         <h3 class="empty-title">No entries yet</h3>
         <p class="empty-text">Write your first entry and it'll live on BOT Chain forever.</p>
         <button class="btn-primary" onclick="navigateTo('write')">Write First Entry</button>
@@ -714,17 +735,17 @@ function entryCardHtml(entry) {
         <span class="entry-card-date">${fmtDateFull(date)}</span>
         <div class="entry-card-badges">
           ${moodChipHtml(entry.mood)}
-          ${entry.isMinted ? '<span class="nft-badge">🏅 NFT</span>' : ''}
+          ${entry.isMinted ? `<span class="nft-badge">${ico('medal', 13)} NFT</span>` : ''}
         </div>
       </div>
       <p class="entry-excerpt">${excerpt}</p>
       <div class="entry-actions">
-        <button class="entry-action-btn" onclick="openViewModal(${entry.id})">👁 View</button>
-        <button class="entry-action-btn" onclick="openEditModal(${entry.id})">✏️ Edit</button>
-        <button class="entry-action-btn del" onclick="openDeleteModal(${entry.id})">🗑️ Delete</button>
+        <button class="entry-action-btn" onclick="openViewModal(${entry.id})">${ico('view', 14)} View</button>
+        <button class="entry-action-btn" onclick="openEditModal(${entry.id})">${ico('edit', 14)} Edit</button>
+        <button class="entry-action-btn del" onclick="openDeleteModal(${entry.id})">${ico('trash', 14)} Delete</button>
         ${!entry.isMinted
-          ? `<button class="entry-action-btn" onclick="openMintModal(${entry.id})">🏅 Mint NFT</button>`
-          : `<span class="nft-badge" style="margin-left:auto;">🏅 Minted</span>`}
+          ? `<button class="entry-action-btn" onclick="openMintModal(${entry.id})">${ico('medal', 14)} Mint NFT</button>`
+          : `<span class="nft-badge" style="margin-left:auto;">${ico('medal', 13)} Minted</span>`}
       </div>
     </div>
   `;
@@ -799,12 +820,12 @@ function openViewModal(id) {
   document.getElementById('view-modal-body').innerHTML = `
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
       ${moodChipHtml(entry.mood)}
-      ${entry.isMinted ? '<span class="nft-badge">🏅 NFT</span>' : ''}
+      ${entry.isMinted ? `<span class="nft-badge">${ico('medal', 13)} NFT</span>` : ''}
     </div>
     <p style="color:var(--ink-2);line-height:1.8;white-space:pre-wrap;font-size:0.9375rem;">${esc(entry.text)}</p>
     <div class="entry-actions" style="margin-top:16px;">
-      <button class="entry-action-btn" onclick="closeModal('view-modal');openEditModal(${id})">✏️ Edit</button>
-      <button class="entry-action-btn del" onclick="closeModal('view-modal');openDeleteModal(${id})">🗑️ Delete</button>
+      <button class="entry-action-btn" onclick="closeModal('view-modal');openEditModal(${id})">${ico('edit', 14)} Edit</button>
+      <button class="entry-action-btn del" onclick="closeModal('view-modal');openDeleteModal(${id})">${ico('trash', 14)} Delete</button>
     </div>
   `;
   openModal('view-modal');
@@ -821,7 +842,7 @@ function openEditModal(id) {
       <div class="form-group">
         <label class="form-label">Mood</label>
         <div class="mood-selector">
-          <span class="mood-end-label">😣 Unpleasant</span>
+          <span class="mood-end-label">${ico('frown', 18)} Unpleasant</span>
           <div class="mood-steps">
             ${MOODS.map(m => `
               <div class="mood-step">
@@ -833,7 +854,7 @@ function openEditModal(id) {
                 <span class="mood-btn-label">${m.label}</span>
               </div>`).join('')}
           </div>
-          <span class="mood-end-label" style="text-align:right">Pleasant 😄</span>
+          <span class="mood-end-label" style="text-align:right">Pleasant ${ico('smile', 18)}</span>
         </div>
       </div>
       <div class="form-group">
@@ -1056,8 +1077,8 @@ function showToast(message, type = 'info') {
   if (!container) return;
   const t = document.createElement('div');
   t.className = `toast ${type}`;
-  const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-  t.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+  const icon = type === 'success' ? ico('check', 16) : type === 'error' ? ico('error', 16) : ico('info', 16);
+  t.innerHTML = `<span style="display:inline-flex;align-items:center;">${icon}</span><span>${message}</span>`;
   container.appendChild(t);
   setTimeout(() => {
     t.style.opacity = '0';

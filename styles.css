@@ -291,27 +291,91 @@ a       { color: var(--brown); text-decoration: none; }
   background: var(--brown-glass);
 }
 
-/* ── Hero features ── */
-.hero-features {
+/* ── Hero reviews marquee ── */
+.hero-reviews {
+  width: 100%;
+  max-width: 920px;
+  margin: var(--sp-8) auto 0;
   display: flex;
-  gap: var(--sp-6);
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
 
-.hero-feature {
+.marquee-row {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: var(--sp-4);
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.marquee-row.reverse .marquee-track {
+  animation-direction: reverse;
+}
+
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.review-card {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--white);
+  border: 1px solid var(--surface-2);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(60, 45, 30, 0.08));
+}
+
+.review-head {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+}
+
+.review-avatar {
+  border-radius: 50%;
+  background: var(--surface-2);
+}
+
+.review-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-name {
   font-size: var(--text-sm);
+  font-weight: var(--w-semibold);
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.review-user {
+  font-size: 11px;
   color: var(--ink-3);
 }
 
-.hero-feature-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--brown-xl);
+.review-body {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-2);
 }
 
 /* ── Article Layout (Anthropic Style) ── */
