@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Journal3 Works</title>
+  <meta name="description" content="Learn how Journal3 combines a beautiful journaling experience with Web3 permanence." />
+  <meta name="theme-color" content="#FAF8F5" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="article-page">
+
+  <!-- Minimal Nav -->
+  <nav class="landing-nav" role="navigation" aria-label="Site navigation">
+    <a href="index.html" class="landing-logo" aria-label="Journal3 Home">Journal<em>3</em></a>
+    <a class="btn-secondary" href="index.html">← Back to App</a>
+  </nav>
+
+  <!-- Article Header -->
+  <header class="article-header">
+    <h1>Your thoughts,<br><em>decentralized.</em></h1>
+    <p>Journal3 combines a beautiful, mindful journaling experience with the immutable permanence of Web3.</p>
+  </header>
+
+  <!-- Article Content -->
+  <main class="article-content">
+    
+    <h2>The Philosophy</h2>
+    <p>We believe that personal reflections, daily moods, and meaningful memories deserve to be preserved securely. Traditional journaling apps store your most private thoughts on centralized servers, vulnerable to being lost, sold, or locked behind paywalls.</p>
+    <p>Journal3 changes this by putting you in total control. By leveraging the <strong>BOT Chain</strong> ledger, your journal entries are permanently etched into the blockchain, bound only to your cryptographic wallet.</p>
+
+    <div class="article-divider"></div>
+
+    <h2>1. Writing On-Chain</h2>
+    <p>When you log a mood (from a 1-5 scale) and write your thoughts, Journal3 does not send this data to a traditional database. Instead, it interacts directly with our custom smart contract via <strong>ethers.js</strong>.</p>
+    <p>The text is stored on-chain inside a struct. Because blockchains are immutable, we designed a "soft delete" system. If you choose to delete an entry, the app hides it from your view, but the blockchain maintains the historical record of your thoughts forever.</p>
+
+    <div class="article-divider"></div>
+
+    <h2>2. Decentralized Photos via IPFS</h2>
+    <p>Storing binary image data on a blockchain is prohibitively expensive and inefficient. To solve this, Journal3 utilizes the InterPlanetary File System (<strong>IPFS</strong>).</p>
+    <p>When you attach a photo to your entry, you can configure your own Pinata API key in the app settings. The image is pinned securely to IPFS, and only the lightweight CID (Content Identifier) string is saved on-chain, keeping gas costs incredibly low while maintaining true decentralization.</p>
+
+    <div class="article-divider"></div>
+
+    <h2>3. Minting Memories as NFTs</h2>
+    <p>Some days are more special than others. For those moments, Journal3 allows you to mint a specific journal entry as a 1-of-1 <strong>ERC-721 NFT</strong>.</p>
+    <p>This process takes the metadata of your entry—the mood, the date, a text excerpt, and the attached photo—and immutably binds it to an NFT on the BOT Chain. It's a digital monument to a specific day in your life, held securely in your own wallet.</p>
+
+    <div class="article-divider"></div>
+
+    <h2>Ready to start?</h2>
+    <p>Head back to the home page, connect your MetaMask wallet to the BOT Chain network, and write your first permanent entry.</p>
+    
+    <div style="text-align: center; margin-top: 40px;">
+      <a class="btn-primary" href="index.html">Return to Journal3</a>
+    </div>
+
+  </main>
+
+  <footer class="landing-footer" style="margin-top: auto;">
+    <p>Built for the <strong>Girl Meets Tech · BOTChain Build Week Hackathon</strong></p>
+  </footer>
+
+</body>
+</html>
