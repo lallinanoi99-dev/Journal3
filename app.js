@@ -123,6 +123,8 @@ let _provider      = null;
 let _signer        = null;
 let _contract      = null;
 let _wallet        = null;
+let _freighterWallet = null;
+let _xlmBalance    = '0';
 let _entries       = [];
 let _currentPanel  = 'dashboard';
 let _selectedMood  = null;
@@ -174,6 +176,7 @@ async function checkExistingConnection() {
 }
 
 async function connectWallet() {
+  closeModal('wallet-modal');
   if (!window.ethereum) {
     openModal('metamask-modal');
     return;
@@ -254,9 +257,52 @@ function disconnectWallet() {
   _provider  = null;
   _contract  = null;
   _entries   = [];
+  _freighterWallet = null;
+  _xlmBalance = '0';
   document.getElementById('app').classList.remove('active');
   document.getElementById('app').style.display = 'none';
   document.getElementById('landing').style.display = 'flex';
+}
+
+async function connectFreighter() {
+  closeModal('wallet-modal');
+  if (!window.freighterApi) {
+    showToast('Freighter extension not found.', 'error');
+    return;
+  }
+  
+  try {
+    const isConnected = await window.freighterApi.isConnected();
+    if (!isConnected) {
+      showToast('Freighter not connected or installed.', 'error');
+      return;
+    }
+    const publicKey = await window.freighterApi.requestAccess();
+    if (!publicKey) throw new Error('No public key returned');
+    
+    _freighterWallet = publicKey;
+    showApp();
+    await fetchXlmBalance();
+  } catch (err) {
+    showToast('Freighter connection failed: ' + err.message, 'error');
+  }
+}
+
+async function fetchXlmBalance() {
+  if (!_freighterWallet) return;
+  try {
+    const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+    const account = await server.loadAccount(_freighterWallet);
+    const nativeBalance = account.balances.find(b => b.asset_type === 'native');
+    if (nativeBalance) {
+      _xlmBalance = parseFloat(nativeBalance.balance).toFixed(2);
+      document.getElementById('stellar-balance').textContent = _xlmBalance + ' XLM';
+    }
+  } catch (err) {
+    console.warn('Could not fetch XLM balance:', err);
+    _xlmBalance = '0.00';
+    document.getElementById('stellar-balance').textContent = '0.00 XLM';
+  }
 }
 
 function showApp() {
@@ -265,8 +311,23 @@ function showApp() {
   app.style.display = 'flex';
   requestAnimationFrame(() => app.classList.add('active'));
 
-  const short = `${_wallet.slice(0, 6)}…${_wallet.slice(-4)}`;
-  document.getElementById('wallet-address-short').textContent = short;
+  const mmChip = document.getElementById('wallet-chip');
+  if (_wallet) {
+    const short = `${_wallet.slice(0, 6)}…${_wallet.slice(-4)}`;
+    document.getElementById('wallet-address-short').textContent = short;
+    mmChip.style.display = 'flex';
+  } else {
+    mmChip.style.display = 'none';
+  }
+
+  const stellarChip = document.getElementById('stellar-wallet-chip');
+  if (_freighterWallet) {
+    const short = `${_freighterWallet.slice(0, 4)}…${_freighterWallet.slice(-4)}`;
+    document.getElementById('stellar-address-short').textContent = short;
+    stellarChip.style.display = 'flex';
+  } else {
+    stellarChip.style.display = 'none';
+  }
 
   const badge   = document.getElementById('network-badge');
   const isTest  = ACTIVE_NET.chainId === '0x3C8';
