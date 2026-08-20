@@ -270,6 +270,20 @@
       </svg>
     </button>
 
+    <!-- Stellar -->
+    <button class="sidebar-btn"
+            id="nav-stellar"
+            data-panel="stellar"
+            data-tip="Stellar"
+            onclick="navigateTo('stellar')"
+            aria-label="Stellar Transaction">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+    </button>
+
     <div class="sidebar-divider" role="separator"></div>
 
     <!-- Settings -->
@@ -319,6 +333,11 @@
           <div class="wallet-dot" aria-hidden="true"></div>
           <span id="wallet-address-short">0x···</span>
         </div>
+        <div class="wallet-chip" id="stellar-wallet-chip" aria-live="polite" style="display:none; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;">
+          <div class="wallet-dot" style="background: #0284c7;" aria-hidden="true"></div>
+          <span id="stellar-address-short">G···</span>
+          <span id="stellar-balance" style="font-weight: bold; margin-left: 6px;">0 XLM</span>
+        </div>
       </div>
     </div>
 
@@ -352,6 +371,30 @@
       <p class="panel-subtitle">Manage your Journal3 profile and preferences.</p>
       <div id="settings-content"></div>
     </section>
+
+    <!-- ── Stellar Panel ── -->
+    <section class="panel" id="panel-stellar" aria-label="Stellar">
+      <h2 class="panel-title">Stellar Transaction Flow</h2>
+      <p class="panel-subtitle">Send a testnet XLM transaction using your Freighter wallet.</p>
+      <div id="stellar-content">
+        <div class="write-form">
+          <div class="form-group">
+            <label class="form-label">Send XLM to Address</label>
+            <input type="text" id="stellar-tx-to" class="form-textarea" style="min-height: 40px; height: 40px;" placeholder="G... (Leave blank to send to yourself)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount (XLM)</label>
+            <input type="number" id="stellar-tx-amount" class="form-textarea" style="min-height: 40px; height: 40px;" placeholder="1.0" value="1.0" />
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" id="stellar-send-btn" type="button" onclick="handleStellarSend()">
+              Send XLM 🚀
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
   </main>
 </div>
