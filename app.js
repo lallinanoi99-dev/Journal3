@@ -1129,7 +1129,15 @@ function avatarInitials(str) {
 /* ═══════════════════════════════════════════════════════════
    MODAL HELPERS
 ═══════════════════════════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id)?.classList.add('open'); }
+function openModal(id)  {
+  if (id === 'wallet-modal') {
+    const btnMm = document.getElementById('btn-connect-mm');
+    if (btnMm) btnMm.textContent = _wallet ? `MetaMask Connected (${_wallet.slice(0,6)}...)` : 'Connect MetaMask (BOT Chain)';
+    const btnFr = document.getElementById('btn-connect-fr');
+    if (btnFr) btnFr.textContent = _freighterWallet ? `Freighter Connected (${_freighterWallet.slice(0,4)}...)` : 'Connect Freighter (Stellar Testnet)';
+  }
+  document.getElementById(id)?.classList.add('open');
+}
 function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
 function openArticle(id) {
