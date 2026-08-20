@@ -27,7 +27,7 @@
   <!-- Nav -->
   <nav class="landing-nav" id="landing-nav" role="navigation" aria-label="Site navigation">
     <div class="landing-logo" aria-label="Journal3">Journal<em>3</em></div>
-    <button class="btn-primary" id="nav-connect-btn" onclick="connectWallet()">
+    <button class="btn-primary" id="nav-connect-btn" onclick="openModal('wallet-modal')">
       Connect Wallet
     </button>
   </nav>
@@ -48,7 +48,7 @@
     </p>
 
     <div class="hero-cta-group">
-      <button class="btn-primary" id="hero-connect-btn" onclick="connectWallet()">
+      <button class="btn-primary" id="hero-connect-btn" onclick="openModal('wallet-modal')">
         Get Started
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M1 7h12M7.5 2l5 5-5 5" stroke="currentColor" stroke-width="1.6"
@@ -418,6 +418,28 @@
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('mint-modal')">Cancel</button>
       <button class="btn-save" id="mint-confirm-btn">Mint NFT</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Wallet Selection Modal ── -->
+<div class="modal-overlay" id="wallet-modal" role="dialog"
+     aria-modal="true" aria-labelledby="wallet-modal-title">
+  <div class="modal">
+    <h3 class="modal-title" id="wallet-modal-title">Connect Wallet</h3>
+    <p class="modal-subtitle">
+      Choose a network to connect to Journal3.
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+      <button class="btn-secondary" style="width: 100%; justify-content: center;" onclick="connectWallet()">
+        Connect MetaMask (BOT Chain)
+      </button>
+      <button class="btn-secondary" style="width: 100%; justify-content: center;" onclick="connectFreighter()">
+        Connect Freighter (Stellar Testnet)
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('wallet-modal')">Cancel</button>
     </div>
   </div>
 </div>
