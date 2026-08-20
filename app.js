@@ -124,7 +124,7 @@ let _provider      = null;
 let _signer        = null;
 let _contract      = null;
 let _wallet        = null;
-let _freighterWallet = null;
+let _freighterWallet = localStorage.getItem('freighterWallet') || null;
 let _xlmBalance    = '0';
 let _entries       = [];
 let _currentPanel  = 'dashboard';
@@ -174,6 +174,10 @@ function getTimeOfDay() {
    WALLET
 ═══════════════════════════════════════════════════════════ */
 async function checkExistingConnection() {
+  if (_freighterWallet) {
+    showApp();
+    fetchXlmBalance();
+  }
   if (!window.ethereum) return;
   try {
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -290,6 +294,7 @@ async function connectFreighter() {
     if (!accessRes.address) throw new Error('No public key returned');
     
     _freighterWallet = accessRes.address;
+    localStorage.setItem('freighterWallet', _freighterWallet);
     showApp();
     await fetchXlmBalance();
   } catch (err) {
@@ -299,6 +304,7 @@ async function connectFreighter() {
 
 function disconnectFreighter() {
   _freighterWallet = null;
+  localStorage.removeItem('freighterWallet');
   _xlmBalance = '0';
   document.getElementById('stellar-balance').textContent = '0 XLM';
   showApp(); // Re-render topbar
@@ -428,14 +434,17 @@ async function txMintEntry(entryId, tokenURI) {
 
 async function runTx(txFn, successMsg, action) {
   if (!_contract) {
-    showToast('Contract not initialized.', 'error');
+    showToast('Please connect MetaMask to save entries to BOT Chain.', 'error');
     return null;
   }
   try {
     const tx = await txFn();
     showToast('Transaction submitted — waiting for confirmation…', 'info');
     const receipt = await tx.wait();
-    showToast(successMsg, 'success');
+    
+    const explorerUrl = `${ACTIVE_NET.blockExplorerUrls[0]}/tx/${receipt.hash}`;
+    const explorerLink = ` <a href="${explorerUrl}" target="_blank" style="color:var(--ink);text-decoration:underline;">View Transaction</a>`;
+    showToast(successMsg + explorerLink, 'success');
     await loadEntries();
     if (_currentPanel === 'dashboard') renderDashboard();
     if (_currentPanel === 'entries') renderEntries();
