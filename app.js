@@ -1241,7 +1241,8 @@ async function handleStellarSend() {
     
     const response = await server.submitTransaction(signedTx);
     
-    showToast(`Success! TX Hash: ${response.hash.slice(0, 10)}...`, 'success');
+    const explorerUrl = `https://stellar.expert/explorer/testnet/tx/${response.hash}`;
+    showToast(`Success! <a href="${explorerUrl}" target="_blank" style="color:var(--ink);text-decoration:underline;">View on Explorer</a>`, 'success');
     
     document.getElementById('stellar-tx-to').value = '';
     document.getElementById('stellar-tx-amount').value = '1.0';
