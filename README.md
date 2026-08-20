@@ -1,11 +1,12 @@
 # Journal3
 
-> A daily journaling mini-dApp on BOT Chain. Log your mood, write your thoughts, attach a photo, and optionally mint your entries as NFTs. Built for the **Girl Meets Tech · BOTChain Build Week Hackathon**.
+<img width="1710" height="981" alt="image" src="https://github.com/user-attachments/assets/59b8d581-daac-4ee4-9d81-6f54f25be153" />
+
 
 ## Overview
 
 Journal3 takes the concept of a personal journal (like Apple Journal) and puts it permanently on-chain. It focuses on a rock-solid core user flow:
-- Connect MetaMask
+- Connect MetaMask / Freighter
 - Log your mood on a 1-5 scale (Unpleasant ↔ Pleasant)
 - Write your thoughts (stored completely **on-chain** as a string)
 - Optionally upload a photo (stored via **IPFS** to keep gas costs reasonable)
@@ -69,16 +70,18 @@ Since the app is pure HTML/CSS/JS, you can host it for free on GitHub Pages:
 As part of the submission requirements, here are the screenshots demonstrating the functionality:
 
 ### 1. Wallet Connected State
-[PASTE SCREENSHOT HERE]
+<img width="1318" height="926" alt="Screenshot 2026-08-21 at 00 38 47" src="https://github.com/user-attachments/assets/3a2d0890-eb39-4d8d-a284-c882412049be" />
+
 
 ### 2. Balance Displayed
-[PASTE SCREENSHOT HERE]
+<img width="1318" height="926" alt="Screenshot 2026-08-21 at 00 38 47" src="https://github.com/user-attachments/assets/2af1cc3d-0ad4-48a9-9049-3022b81f79c0" />
+
 
 ### 3. Successful Testnet Transaction
-[PASTE SCREENSHOT HERE]
+<img width="1387" height="521" alt="Screenshot 2026-08-21 at 00 41 51" src="https://github.com/user-attachments/assets/8096d26b-ad33-4f2a-b3b5-34e8871d3d0e" />
+
 
 ### 4. Transaction Result Shown to User
-[PASTE SCREENSHOT HERE]
+<img width="330" height="118" alt="image" src="https://github.com/user-attachments/assets/6e550312-8043-4dd9-9de2-7ef29b4815c8" />
 
-## Author
-Built by [Your Name / Team Name] for the Girl Meets Tech BOTChain Build Week.
+
