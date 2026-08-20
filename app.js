@@ -288,6 +288,21 @@ async function connectFreighter() {
   }
 }
 
+function disconnectFreighter() {
+  _freighterWallet = null;
+  _xlmBalance = '0';
+  document.getElementById('stellar-balance').textContent = '0 XLM';
+  showApp(); // Re-render topbar
+  
+  if (!_wallet) {
+    // If metamask is also not connected, hide app completely
+    document.getElementById('app').classList.remove('active');
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+  }
+  showToast('Freighter disconnected.', 'info');
+}
+
 async function fetchXlmBalance() {
   if (!_freighterWallet) return;
   try {
