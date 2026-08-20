@@ -1170,3 +1170,88 @@ function esc(str) {
   div.appendChild(document.createTextNode(str || ''));
   return div.innerHTML;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   STELLAR TRANSACTIONS
+═══════════════════════════════════════════════════════════ */
+async function handleStellarSend() {
+  if (!_freighterWallet) {
+    showToast('Freighter wallet not connected.', 'error');
+    return;
+  }
+  
+  const toInput = document.getElementById('stellar-tx-to').value.trim();
+  const destination = toInput || _freighterWallet;
+  const amountStr = document.getElementById('stellar-tx-amount').value.trim();
+  
+  if (!destination.startsWith('G') || destination.length !== 56) {
+    showToast('Invalid Stellar destination address.', 'error');
+    return;
+  }
+  
+  const amountNum = parseFloat(amountStr);
+  if (isNaN(amountNum) || amountNum <= 0) {
+    showToast('Invalid amount.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('stellar-send-btn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="margin:0 auto;"></div>';
+
+  try {
+    const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+    
+    // Check if destination exists
+    try {
+      await server.loadAccount(destination);
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        throw new Error('Destination account does not exist on testnet.');
+      }
+      throw e;
+    }
+
+    const sourceAccount = await server.loadAccount(_freighterWallet);
+    const networkPassphrase = StellarSdk.Networks.TESTNET;
+
+    const tx = new StellarSdk.TransactionBuilder(sourceAccount, {
+      fee: await server.fetchBaseFee(),
+      networkPassphrase
+    })
+    .addOperation(StellarSdk.Operation.payment({
+      destination: destination,
+      asset: StellarSdk.Asset.native(),
+      amount: amountNum.toFixed(7)
+    }))
+    .setTimeout(30)
+    .build();
+
+    const xdr = tx.toXDR();
+    
+    const signedXdr = await window.freighterApi.signTransaction(xdr, {
+      network: 'TESTNET',
+      networkPassphrase
+    });
+    
+    const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedXdr, networkPassphrase);
+    
+    showToast('Transaction signed! Submitting to network...', 'info');
+    
+    const response = await server.submitTransaction(signedTx);
+    
+    showToast(`Success! TX Hash: ${response.hash.slice(0, 10)}...`, 'success');
+    
+    document.getElementById('stellar-tx-to').value = '';
+    document.getElementById('stellar-tx-amount').value = '1.0';
+    
+    await fetchXlmBalance();
+  } catch (err) {
+    console.error('Stellar TX Error:', err);
+    showToast('Transaction failed: ' + (err.message || 'Unknown error'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
