@@ -272,15 +272,16 @@ async function connectFreighter() {
   }
   
   try {
-    const isConnected = await window.freighterApi.isConnected();
-    if (!isConnected) {
+    const connRes = await window.freighterApi.isConnected();
+    if (!connRes || !connRes.isConnected) {
       showToast('Freighter not connected or installed.', 'error');
       return;
     }
-    const publicKey = await window.freighterApi.requestAccess();
-    if (!publicKey) throw new Error('No public key returned');
+    const accessRes = await window.freighterApi.requestAccess();
+    if (accessRes.error) throw new Error(accessRes.error);
+    if (!accessRes.address) throw new Error('No public key returned');
     
-    _freighterWallet = publicKey;
+    _freighterWallet = accessRes.address;
     showApp();
     await fetchXlmBalance();
   } catch (err) {
@@ -1253,12 +1254,13 @@ async function handleStellarSend() {
 
     const xdr = tx.toXDR();
     
-    const signedXdr = await window.freighterApi.signTransaction(xdr, {
+    const signRes = await window.freighterApi.signTransaction(xdr, {
       network: 'TESTNET',
       networkPassphrase
     });
     
-    const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedXdr, networkPassphrase);
+    if (signRes.error) throw new Error(signRes.error);
+    const signedTx = StellarSdk.TransactionBuilder.fromXDR(signRes.signedTxXdr, networkPassphrase);
     
     showToast('Transaction signed! Submitting to network...', 'info');
     
