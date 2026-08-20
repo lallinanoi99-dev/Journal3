@@ -62,7 +62,23 @@ Since the app is pure HTML/CSS/JS, you can host it for free on GitHub Pages:
 2. Go to your repository **Settings > Pages**.
 3. Under **Build and deployment**, set the Source to **Deploy from a branch**.
 4. Select the `main` (or `master`) branch and `/ (root)` folder.
-5. Click **Save**. Your app will be live at `https://<your-username>.github.io/<repo-name>`.
+6. Click **Save**. Your app will be live at `https://<your-username>.github.io/<repo-name>`.
+
+## Screenshots
+
+As part of the submission requirements, here are the screenshots demonstrating the functionality:
+
+### 1. Wallet Connected State
+[PASTE SCREENSHOT HERE]
+
+### 2. Balance Displayed
+[PASTE SCREENSHOT HERE]
+
+### 3. Successful Testnet Transaction
+[PASTE SCREENSHOT HERE]
+
+### 4. Transaction Result Shown to User
+[PASTE SCREENSHOT HERE]
 
 ## Author
 Built by [Your Name / Team Name] for the Girl Meets Tech BOTChain Build Week.

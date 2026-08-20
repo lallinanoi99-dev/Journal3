@@ -23,7 +23,8 @@ const NETWORKS = {
   },
 };
 
-const ACTIVE_NET = NETWORKS.mainnet;
+let _useTestnet = localStorage.getItem('useTestnet') !== 'false';
+let ACTIVE_NET = _useTestnet ? NETWORKS.testnet : NETWORKS.mainnet;
 const CONTRACT_ADDRESS = '0xBd9c1896A5eD022c4c708295E0D72a45F3E4F413';
 
 const CONTRACT_ABI = [
@@ -147,7 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', onAccountsChanged);
-    window.ethereum.on('chainChanged', () => window.location.reload());
+    window.ethereum.on('chainChanged', (chainId) => {
+      if (chainId.toLowerCase() === NETWORKS.mainnet.chainId.toLowerCase()) {
+        localStorage.setItem('useTestnet', 'false');
+      } else if (chainId.toLowerCase() === NETWORKS.testnet.chainId.toLowerCase()) {
+        localStorage.setItem('useTestnet', 'true');
+      }
+      window.location.reload();
+    });
   }
 
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -307,7 +315,8 @@ function disconnectFreighter() {
 async function fetchXlmBalance() {
   if (!_freighterWallet) return;
   try {
-    const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+    const horizonUrl = _useTestnet ? 'https://horizon-testnet.stellar.org' : 'https://horizon.stellar.org';
+    const server = new StellarSdk.Horizon.Server(horizonUrl);
     const account = await server.loadAccount(_freighterWallet);
     const nativeBalance = account.balances.find(b => b.asset_type === 'native');
     if (nativeBalance) {
@@ -1065,14 +1074,23 @@ function renderSettings() {
 
     <!-- Wallet -->
     <div class="settings-card">
-      <p class="settings-card-title">Wallet</p>
+      <p class="settings-card-title">Wallet & Network</p>
       <div class="settings-row">
         <span class="settings-row-label">Address</span>
         <span class="settings-row-value mono">${_wallet || '—'}</span>
       </div>
       <div class="settings-row">
-        <span class="settings-row-label">Network</span>
+        <span class="settings-row-label">Current Network</span>
         <span class="settings-row-value">${ACTIVE_NET.chainName}</span>
+      </div>
+      <div class="settings-row">
+        <span class="settings-row-label">Network Mode</span>
+        <div class="settings-row-right">
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+            <input type="checkbox" id="network-toggle" ${ _useTestnet ? 'checked' : '' } onchange="toggleNetworkMode(this.checked)" />
+            Use Testnet
+          </label>
+        </div>
       </div>
       <div class="settings-row">
         <span class="settings-row-label" style="color:var(--error);">Disconnect</span>
@@ -1080,20 +1098,6 @@ function renderSettings() {
       </div>
     </div>
 
-    <!-- Contract -->
-    <div class="settings-card">
-      <p class="settings-card-title">Contract Info</p>
-      <div class="settings-row">
-        <span class="settings-row-label">Contract Address</span>
-        <span class="settings-row-value mono" style="font-size:12px;">${CONTRACT_ADDRESS}</span>
-      </div>
-      ${CONTRACT_ADDRESS !== 'YOUR_CONTRACT_ADDRESS_HERE'
-        ? `<div class="settings-row">
-             <span class="settings-row-label">View on Explorer</span>
-             <a href="${ACTIVE_NET.blockExplorerUrls[0]}/address/${CONTRACT_ADDRESS}" target="_blank" style="font-size:13px;color:var(--brown);">View Contract ↗</a>
-           </div>`
-        : ''}
-    </div>
   `;
 }
 
@@ -1225,20 +1229,22 @@ async function handleStellarSend() {
   btn.innerHTML = '<div class="spinner" style="margin:0 auto;"></div>';
 
   try {
-    const server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+    const horizonUrl = _useTestnet ? 'https://horizon-testnet.stellar.org' : 'https://horizon.stellar.org';
+    const server = new StellarSdk.Horizon.Server(horizonUrl);
     
     // Check if destination exists
     try {
       await server.loadAccount(destination);
     } catch (e) {
       if (e.response && e.response.status === 404) {
-        throw new Error('Destination account does not exist on testnet.');
+        throw new Error(`Destination account does not exist on ${_useTestnet ? 'testnet' : 'mainnet'}.`);
       }
       throw e;
     }
 
     const sourceAccount = await server.loadAccount(_freighterWallet);
-    const networkPassphrase = StellarSdk.Networks.TESTNET;
+    const networkPassphrase = _useTestnet ? StellarSdk.Networks.TESTNET : StellarSdk.Networks.PUBLIC;
+    const networkStr = _useTestnet ? 'TESTNET' : 'PUBLIC';
 
     const tx = new StellarSdk.TransactionBuilder(sourceAccount, {
       fee: await server.fetchBaseFee(),
@@ -1255,7 +1261,7 @@ async function handleStellarSend() {
     const xdr = tx.toXDR();
     
     const signRes = await window.freighterApi.signTransaction(xdr, {
-      network: 'TESTNET',
+      network: networkStr,
       networkPassphrase
     });
     
@@ -1266,7 +1272,8 @@ async function handleStellarSend() {
     
     const response = await server.submitTransaction(signedTx);
     
-    const explorerUrl = `https://stellar.expert/explorer/testnet/tx/${response.hash}`;
+    const explorerBaseUrl = _useTestnet ? 'https://stellar.expert/explorer/testnet' : 'https://stellar.expert/explorer/public';
+    const explorerUrl = `${explorerBaseUrl}/tx/${response.hash}`;
     showToast(`Success! <a href="${explorerUrl}" target="_blank" style="color:var(--ink);text-decoration:underline;">View on Explorer</a>`, 'success');
     
     document.getElementById('stellar-tx-to').value = '';
@@ -1280,4 +1287,10 @@ async function handleStellarSend() {
     btn.disabled = false;
     btn.innerHTML = originalText;
   }
+}
+
+/* ─── Global Settings Actions ──────────────────────────────── */
+function toggleNetworkMode(isTestnet) {
+  localStorage.setItem('useTestnet', isTestnet);
+  location.reload();
 }
